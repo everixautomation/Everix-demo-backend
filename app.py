@@ -63,6 +63,7 @@ TWILIO_TOKEN    = os.environ.get('TWILIO_AUTH_TOKEN', '')
 TWILIO_FROM     = os.environ.get('TWILIO_PHONE_NUMBER', '')
 RETELL_API_KEY  = os.environ.get('RETELL_API_KEY', '')
 RETELL_AGENT_ID = os.environ.get('RETELL_AGENT_ID', '')
+RETELL_FROM     = os.environ.get('RETELL_FROM_NUMBER', '')
 SHEETS_ID       = os.environ.get('GOOGLE_SHEETS_ID', '')
 GCREDS_JSON     = os.environ.get('GOOGLE_CREDENTIALS_JSON', '')
 BUSINESS_NAME   = os.environ.get('BUSINESS_NAME', BUSINESS_INFO.get('name', 'our office'))
@@ -166,7 +167,7 @@ def retell_call(to, meta=None):
             'https://api.retellai.com/v2/create-phone-call',
             headers={'Authorization': f'Bearer {RETELL_API_KEY}', 'Content-Type': 'application/json'},
             json={
-                'from_number': TWILIO_FROM,
+                'from_number': RETELL_FROM,
                 'to_number': to,
                 'agent_id': RETELL_AGENT_ID,
                 'metadata': meta or {},
