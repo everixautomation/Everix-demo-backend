@@ -18,20 +18,21 @@ To swap this for a different client demo:
 """
 
 BUSINESS_INFO = {
-    'name':     "Daisy's Dental",
-    'address':  '123 Main Street, Toronto, ON M4B 1B3',
-    'phone':    '647-668-4020',
+    'name':     "Daisy's Dental Clinic",
+    'address':  '2590 Yonge Street, Toronto, ON M4P 2J3',
+    'phone':    '(416) 483-2590',
     'email':    'hello@daisysdental.ca',
+    'website':  'http://www.daisysdental.ca',
     'hours': {
-        'Monday':    '8:00am – 5:00pm',
-        'Tuesday':   '8:00am – 5:00pm',
-        'Wednesday': '8:00am – 7:00pm',
-        'Thursday':  '8:00am – 5:00pm',
-        'Friday':    '8:00am – 4:00pm',
-        'Saturday':  '9:00am – 2:00pm',
+        'Monday':    '9:00am – 5:00pm',
+        'Tuesday':   '9:00am – 5:00pm',
+        'Wednesday': '9:00am – 5:00pm',
+        'Thursday':  '9:00am – 5:00pm',
+        'Friday':    '9:00am – 5:00pm',
+        'Saturday':  '11:00am – 4:00pm',
         'Sunday':    'Closed',
     },
-    'emergency_line': '647-668-4020',
+    'emergency_line': '(416) 483-2590',
 }
 
 # ── FAQ ENTRIES ───────────────────────────────────────────────────────────
@@ -44,13 +45,11 @@ FAQ_ENTRIES = [
     {
         'keywords': ['hours', 'open', 'close', 'closing', 'opening', 'when are you', 'what time'],
         'answer': (
-            "Our hours at Daisy's Dental:\n"
-            "  Mon–Tue, Thu: 8am – 5pm\n"
-            "  Wednesday:    8am – 7pm\n"
-            "  Friday:       8am – 4pm\n"
-            "  Saturday:     9am – 2pm\n"
-            "  Sunday:       Closed\n\n"
-            "Text BOOK to schedule an appointment, or call 647-668-4020."
+            "Our hours at Daisy's Dental Clinic:\n"
+            "  Mon–Fri:  9:00am – 5:00pm\n"
+            "  Saturday: 11:00am – 4:00pm\n"
+            "  Sunday:   Closed\n\n"
+            "Text BOOK to schedule an appointment, or call (416) 483-2590."
         ),
     },
 
@@ -59,9 +58,10 @@ FAQ_ENTRIES = [
         'keywords': ['address', 'location', 'where', 'directions', 'parking'],
         'answer': (
             "We're located at:\n"
-            "  123 Main Street, Toronto, ON M4B 1B3\n\n"
-            "Free parking is available in our lot behind the building — enter from the side street.\n"
-            "TTC: Donlands station is a 5-minute walk."
+            "  2590 Yonge Street, Toronto, ON M4P 2J3\n"
+            "  (Between Eglinton and Lawrence, east side of Yonge)\n\n"
+            "Parking: street parking on Yonge St, or paid lot at 2600 Yonge St next door.\n"
+            "TTC: Eglinton Station (Line 1) — 5-minute walk north on Yonge."
         ),
     },
 
@@ -73,7 +73,7 @@ FAQ_ENTRIES = [
             "Desjardins, and Blue Cross.\n\n"
             "We offer direct billing to your insurance — you only pay the difference (if any) at the time of your visit. "
             "Bring your insurance card and we'll handle the rest.\n\n"
-            "Not sure if you're covered? Call us at 647-668-4020 and we'll check for you."
+            "Not sure if you're covered? Call us at (416) 483-2590 and we'll check for you."
         ),
     },
 
@@ -108,7 +108,7 @@ FAQ_ENTRIES = [
             "  📋 Dentures & Partials\n"
             "  🧒 Children's Dentistry\n"
             "  🆘 Emergency Dental Care\n\n"
-            "Text BOOK to schedule, or call 647-668-4020 for more info."
+            "Text BOOK to schedule, or call (416) 483-2590 for more info."
         ),
     },
 
@@ -124,7 +124,7 @@ FAQ_ENTRIES = [
             "  Whitening: $400–$600\n\n"
             "We direct-bill most insurance plans, so your out-of-pocket is often $0. "
             "We also offer payment plans for larger treatments.\n\n"
-            "Call 647-668-4020 for a specific estimate."
+            "Call (416) 483-2590 for a specific estimate."
         ),
     },
 
@@ -133,7 +133,7 @@ FAQ_ENTRIES = [
         'keywords': ['emergency', 'tooth pain', 'toothache', 'broken tooth', 'chipped', 'knocked out', 'urgent', 'asap', 'swollen'],
         'answer': (
             "🚨 Dental Emergency?\n\n"
-            "Call us immediately at 647-668-4020. We hold same-day emergency slots and will get you seen as soon as possible.\n\n"
+            "Call us immediately at (416) 483-2590. We hold same-day emergency slots and will get you seen as soon as possible.\n\n"
             "If you're in severe pain or have facial swelling, go to the nearest emergency room or call 911."
         ),
     },
@@ -143,9 +143,9 @@ FAQ_ENTRIES = [
         'keywords': ['cancel', 'cancellation', 'reschedule', 'late cancel', 'miss', 'no show'],
         'answer': (
             "We ask for 24 hours notice to cancel or reschedule without a fee.\n\n"
-            "To reschedule: text RESCHEDULE or call 647-668-4020.\n"
+            "To reschedule: text RESCHEDULE or call (416) 483-2590.\n"
             "To cancel: text CANCEL.\n\n"
-            "Same-day cancellations may be subject to a $50 cancellation fee."
+            "Late cancellations (under 24 hours) may be subject to a $75 fee. No-shows may be charged $100."
         ),
     },
 
@@ -154,7 +154,7 @@ FAQ_ENTRIES = [
         'keywords': ['kids', 'children', 'child', 'family', 'pediatric', 'baby', 'infant', 'toddler'],
         'answer': (
             "Yes! We're a family-friendly practice and love seeing young patients. "
-            "We recommend a child's first dental visit by age 1 or when their first tooth appears.\n\n"
+            "We welcome children from age 3 and recommend their first visit around age 3 or when their first teeth appear.\n\n"
             "We make kids feel comfortable and at ease — no scary drills, just friendly care.\n\n"
             "Text BOOK to schedule a family appointment."
         ),
@@ -170,7 +170,7 @@ FAQ_ENTRIES = [
             "  • Oral sedation for moderate anxiety\n"
             "  • A calm, judgment-free environment\n\n"
             "Let us know when booking and we'll make sure your visit is as comfortable as possible. "
-            "Call 647-668-4020 to discuss your options."
+            "Call (416) 483-2590 to discuss your options."
         ),
     },
 
@@ -197,7 +197,7 @@ FAQ_ENTRIES = [
             "  3. Healing period (3–6 months)\n"
             "  4. Crown placement\n\n"
             "Cost: typically $3,000–$5,000 per implant. Many insurance plans cover partial costs.\n\n"
-            "Text BOOK for a free consultation, or call 647-668-4020."
+            "Text BOOK for a free consultation, or call (416) 483-2590."
         ),
     },
 

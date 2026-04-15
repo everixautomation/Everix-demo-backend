@@ -61,9 +61,10 @@ CORS(app, origins=[ALLOWED_ORIGIN, 'http://localhost:*'])
 TWILIO_SID      = os.environ.get('TWILIO_ACCOUNT_SID', '')
 TWILIO_TOKEN    = os.environ.get('TWILIO_AUTH_TOKEN', '')
 TWILIO_FROM     = os.environ.get('TWILIO_PHONE_NUMBER', '')
-RETELL_API_KEY  = os.environ.get('RETELL_API_KEY', '')
-RETELL_AGENT_ID = os.environ.get('RETELL_AGENT_ID', '')
-RETELL_FROM     = os.environ.get('RETELL_FROM_NUMBER', '')
+RETELL_API_KEY        = os.environ.get('RETELL_API_KEY', '')
+RETELL_AGENT_ID       = os.environ.get('RETELL_AGENT_ID', '')        # inbound receptionist
+RETELL_QUALIFIER_ID   = os.environ.get('RETELL_QUALIFIER_AGENT_ID', '') # outbound speed-to-lead
+RETELL_FROM           = os.environ.get('RETELL_FROM_NUMBER', '')
 SHEETS_ID       = os.environ.get('GOOGLE_SHEETS_ID', '')
 GCREDS_JSON     = os.environ.get('GOOGLE_CREDENTIALS_JSON', '')
 BUSINESS_NAME   = os.environ.get('BUSINESS_NAME', BUSINESS_INFO.get('name', 'our office'))
@@ -159,7 +160,8 @@ def send(to, body, whatsapp=False):
         return False
 
 def retell_call(to, meta=None):
-    if not RETELL_API_KEY or not RETELL_AGENT_ID:
+    agent_id = RETELL_QUALIFIER_ID or RETELL_AGENT_ID  # prefer qualifier for outbound
+    if not RETELL_API_KEY or not agent_id:
         logger.warning('Retell not configured — call skipped for %s', to)
         return None
     try:
@@ -169,7 +171,7 @@ def retell_call(to, meta=None):
             json={
                 'from_number': RETELL_FROM,
                 'to_number': to,
-                'agent_id': RETELL_AGENT_ID,
+                'agent_id': agent_id,
                 'metadata': meta or {},
                 'retell_llm_dynamic_variables': meta or {},
             },
