@@ -217,12 +217,8 @@ def speed_to_lead():
     except Exception:
         return jsonify({'error': 'invalid phone number'}), 400
 
-    # Step 1 — instant SMS
-    send(to, (
-        f"Hi {name}! We received your request at {BUSINESS_NAME} — "
-        f"we're calling you right now to get you sorted. "
-        f"If you miss the call, just text back and we'll book you in by text."
-    ))
+    # Step 1 — instant SMS (kept short for Twilio trial 160-char limit)
+    send(to, f"Hi {name}! {BUSINESS_NAME} here. Calling you now — reply to book if you miss us.")
 
     # Step 2 — Retell outbound call
     call_id = retell_call(to, {
@@ -276,11 +272,8 @@ def retell_webhook():
     if no_answer and to_num:
         slots = available_slots(3)
         send(to_num, (
-            f"Hi {name}! We just tried calling about your {service} request at {BUSINESS_NAME} — "
-            f"sorry we couldn't connect!\n\n"
-            f"Here are our next open times:\n{fmt_slots(slots)}\n\n"
-            f"Reply 1, 2, or 3 to grab a slot — I'll confirm it right away. "
-            f"Or reply CALL ME if you'd prefer we try again."
+            f"Hi {name}! We missed you — reply 1, 2, or 3 to grab a slot:\n{fmt_slots(slots)}\n"
+            f"Or reply CALL ME to try again."
         ))
         conv_state[to_num] = {
             'name': name, 'service': service,
@@ -320,11 +313,7 @@ def retell_booking_tool():
     appointments[to] = appt
     _append_sheet(to, appt)
 
-    send(to, (
-        f"Hi {name}! Your {service} at {BUSINESS_NAME} is confirmed for {appt_dt}. "
-        f"We'll remind you 3 days and 24 hours before. "
-        f"Text RESCHEDULE or CANCEL anytime."
-    ))
+    send(to, f"Booked! {name} — {service} on {appt_dt}. Text RESCHEDULE or CANCEL anytime.")
     return jsonify({'success': True, 'appointment': appt})
 
 
@@ -642,9 +631,8 @@ def send_reminders():
         # 24-hour reminder
         if tomorrow.lower() in dt_str.lower():
             send(phone, (
-                f"Hi {name}! Reminder: your {svc} at {BUSINESS_NAME} is TOMORROW — {dt_str}.\n\n"
-                f"Reply CONFIRM to confirm, RESCHEDULE to change, or CANCEL to cancel.\n"
-                f"Questions? Call {BUSINESS_PHONE}."
+                f"Reminder {name}: {svc} TOMORROW — {dt_str}.\n"
+                f"Reply CONFIRM, RESCHEDULE, or CANCEL."
             ))
             conv_state[phone] = {'name': name, 'step': 'reminder_sent'}
             sent_24h += 1
@@ -652,9 +640,8 @@ def send_reminders():
         # 3-day reminder
         elif in_3days.lower() in dt_str.lower():
             send(phone, (
-                f"Hi {name}! Just a heads-up — your {svc} at {BUSINESS_NAME} is in 3 days: {dt_str}.\n\n"
-                f"Need to change anything? Reply RESCHEDULE or CANCEL. "
-                f"Otherwise, we'll see you then!"
+                f"Heads-up {name}: {svc} in 3 days — {dt_str}.\n"
+                f"Reply RESCHEDULE or CANCEL if needed."
             ))
             sent_3d += 1
 
