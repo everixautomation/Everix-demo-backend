@@ -1,210 +1,264 @@
 """
-Daisy's Dental — FAQ Knowledge Base
--------------------------------------
+Summit Legal Partners — FAQ Knowledge Base
+-------------------------------------------
 Used by the SMS/WhatsApp bot and AI Receptionist to answer common questions.
 
-To customize for a different client:
-  - Update BUSINESS_INFO
-  - Edit or add entries in FAQ_ENTRIES
-  - Each entry has: keywords (what to match), answer (what to reply)
+Practice areas: Personal Injury, Family Law, Real Estate, Corporate &
+Commercial, Wills & Estates, Criminal Defence.
 
-To add this to the Retell AI agent:
-  - Copy the answers into your Retell agent's knowledge base
-  - Or connect this file via the /api/faq endpoint
-
-To swap this for a different client demo:
-  - Create a new knowledge_base_[client].py and import it conditionally
-    based on the BUSINESS_NAME environment variable.
+All consultations start with a free 30-minute intake call booked via Calendly.
 """
 
 BUSINESS_INFO = {
-    'name':     "Daisy's Dental Clinic",
-    'address':  '2590 Yonge Street, Toronto, ON M4P 2J3',
-    'phone':    '(416) 483-2590',
-    'email':    'hello@daisysdental.ca',
-    'website':  'http://www.daisysdental.ca',
+    'name':     'Summit Legal Partners',
+    'address':  '100 King Street West, Suite 5700, Toronto, ON M5X 1C7',
+    'phone':    '(416) 362-0100',
+    'email':    'info@summitlegalpartners.ca',
+    'website':  'https://summitlegalpartners.ca',
+    'calendly': 'https://calendly.com/everixautomation/free-ai-gap-analysis',
     'hours': {
         'Monday':    '9:00am – 5:00pm',
         'Tuesday':   '9:00am – 5:00pm',
         'Wednesday': '9:00am – 5:00pm',
         'Thursday':  '9:00am – 5:00pm',
         'Friday':    '9:00am – 5:00pm',
-        'Saturday':  '11:00am – 4:00pm',
+        'Saturday':  'Closed',
         'Sunday':    'Closed',
     },
-    'emergency_line': '(416) 483-2590',
+    'emergency_line': '(416) 362-0100',
 }
 
 # ── FAQ ENTRIES ───────────────────────────────────────────────────────────
-# keywords: list of strings to match against the incoming message (case-insensitive)
-# answer:   the reply to send back
-
 FAQ_ENTRIES = [
 
     # ── HOURS ────────────────────────────────────────────────────────────
     {
         'keywords': ['hours', 'open', 'close', 'closing', 'opening', 'when are you', 'what time'],
         'answer': (
-            "Our hours at Daisy's Dental Clinic:\n"
-            "  Mon–Fri:  9:00am – 5:00pm\n"
-            "  Saturday: 11:00am – 4:00pm\n"
-            "  Sunday:   Closed\n\n"
-            "Text BOOK to schedule an appointment, or call (416) 483-2590."
+            "Summit Legal Partners office hours:\n"
+            "  Mon–Fri: 9:00am – 5:00pm\n"
+            "  Sat–Sun: Closed\n\n"
+            "Need help outside business hours? Our AI intake line is available 24/7. "
+            "Text BOOK to schedule a free consultation, or call (416) 362-0100."
         ),
     },
 
-    # ── LOCATION / PARKING ───────────────────────────────────────────────
+    # ── LOCATION / TRANSIT ───────────────────────────────────────────────
     {
-        'keywords': ['address', 'location', 'where', 'directions', 'parking'],
+        'keywords': ['address', 'location', 'where', 'directions', 'parking', 'transit', 'subway'],
         'answer': (
-            "We're located at:\n"
-            "  2590 Yonge Street, Toronto, ON M4P 2J3\n"
-            "  (Between Eglinton and Lawrence, east side of Yonge)\n\n"
-            "Parking: street parking on Yonge St, or paid lot at 2600 Yonge St next door.\n"
-            "TTC: Eglinton Station (Line 1) — 5-minute walk north on Yonge."
+            "We're located in the heart of Toronto's financial district:\n\n"
+            "  Summit Legal Partners\n"
+            "  100 King Street West, Suite 5700\n"
+            "  Toronto, ON M5X 1C7\n\n"
+            "Transit: King Station (Line 1) — 2-min walk west on King St.\n"
+            "Parking: Underground at 100 King St W or nearby Green P lots on Adelaide.\n"
+            "Virtual consultations available if preferred."
         ),
     },
 
-    # ── INSURANCE ────────────────────────────────────────────────────────
+    # ── FREE CONSULTATION ─────────────────────────────────────────────────
     {
-        'keywords': ['insurance', 'coverage', 'plan', 'benefits', 'covered', 'extended health', 'sunlife', 'manulife', 'great-west'],
+        'keywords': ['free consultation', 'free call', 'cost to speak', 'initial consultation', 'first call',
+                     'no cost', 'free meeting', 'speak to a lawyer'],
         'answer': (
-            "We accept most major insurance plans including Sun Life, Manulife, Canada Life, Great-West, "
-            "Desjardins, and Blue Cross.\n\n"
-            "We offer direct billing to your insurance — you only pay the difference (if any) at the time of your visit. "
-            "Bring your insurance card and we'll handle the rest.\n\n"
-            "Not sure if you're covered? Call us at (416) 483-2590 and we'll check for you."
+            "Yes — your first consultation with Summit Legal Partners is free.\n\n"
+            "It's a 30-minute intake call where we:\n"
+            "  ✓ Review the details of your situation\n"
+            "  ✓ Confirm whether we can help\n"
+            "  ✓ Explain your legal options clearly\n"
+            "  ✓ Outline next steps and fees if you proceed\n\n"
+            "No obligation. No pressure. Text BOOK to schedule yours, or call (416) 362-0100."
         ),
     },
 
-    # ── NEW PATIENT ──────────────────────────────────────────────────────
+    # ── PRACTICE AREAS / SERVICES ─────────────────────────────────────────
     {
-        'keywords': ['new patient', 'first time', 'first visit', 'never been', 'new here', 'first appointment'],
+        'keywords': ['services', 'practice areas', 'what do you do', 'what do you handle',
+                     'areas of law', 'types of cases', 'specialize'],
         'answer': (
-            "Welcome! We love new patients.\n\n"
-            "Your first visit includes:\n"
-            "  ✓ Comprehensive exam\n"
-            "  ✓ Full mouth X-rays\n"
-            "  ✓ Cleaning (if time permits)\n"
-            "  ✓ Treatment plan discussion\n\n"
-            "New patient visits are typically 60–90 minutes. "
-            "Please bring your insurance card and a list of any medications you're taking.\n\n"
-            "Text BOOK to get started!"
+            "Summit Legal Partners handles:\n\n"
+            "  ⚖️  Personal Injury (slip & fall, MVA, disability)\n"
+            "  👨‍👩‍👧  Family Law (divorce, custody, support, separation)\n"
+            "  🏢  Real Estate Law (purchases, sales, refinancing)\n"
+            "  💼  Corporate & Commercial (contracts, incorporations, disputes)\n"
+            "  📋  Wills & Estates (wills, powers of attorney, probate)\n"
+            "  🛡️  Criminal Defence (charges, bail hearings, trials)\n\n"
+            "Not sure if your situation fits? Text BOOK — we'll figure it out on the call."
         ),
     },
 
-    # ── SERVICES ─────────────────────────────────────────────────────────
+    # ── PERSONAL INJURY ───────────────────────────────────────────────────
     {
-        'keywords': ['services', 'what do you do', 'what do you offer', 'treatments', 'procedures'],
+        'keywords': ['injury', 'accident', 'car accident', 'slip and fall', 'slip & fall',
+                     'mva', 'motor vehicle', 'disability', 'ltd', 'hurt', 'injured'],
         'answer': (
-            "We offer a full range of dental services:\n\n"
-            "  🦷 Cleanings & Check-ups\n"
-            "  🔬 X-rays & Exams\n"
-            "  🪥 Fillings & Restorations\n"
-            "  👑 Crowns & Bridges\n"
-            "  🦴 Dental Implants\n"
-            "  😁 Teeth Whitening\n"
-            "  🔧 Root Canal Treatment\n"
-            "  📋 Dentures & Partials\n"
-            "  🧒 Children's Dentistry\n"
-            "  🆘 Emergency Dental Care\n\n"
-            "Text BOOK to schedule, or call (416) 483-2590 for more info."
+            "We handle personal injury claims across Ontario, including:\n\n"
+            "  • Motor vehicle accidents (car, truck, motorcycle)\n"
+            "  • Slip and fall / premises liability\n"
+            "  • Long-term disability (LTD) denials\n"
+            "  • Catastrophic injury claims\n\n"
+            "Personal injury cases are handled on a contingency fee basis — "
+            "you pay nothing unless we win. Text BOOK for your free 30-min consultation."
         ),
     },
 
-    # ── PRICING / COST ───────────────────────────────────────────────────
+    # ── FAMILY LAW ────────────────────────────────────────────────────────
     {
-        'keywords': ['cost', 'price', 'how much', 'fee', 'pricing', 'expensive', 'payment', 'pay'],
+        'keywords': ['divorce', 'separation', 'custody', 'child support', 'spousal support',
+                     'family law', 'matrimonial', 'common law', 'parenting'],
         'answer': (
-            "Our fees follow the Ontario Dental Association (ODA) fee guide.\n\n"
-            "Typical costs:\n"
-            "  Cleaning + exam: $200–$350 (usually covered by insurance)\n"
-            "  Filling: $150–$300 per tooth\n"
-            "  Crown: $1,200–$1,800 per tooth\n"
-            "  Whitening: $400–$600\n\n"
-            "We direct-bill most insurance plans, so your out-of-pocket is often $0. "
-            "We also offer payment plans for larger treatments.\n\n"
-            "Call (416) 483-2590 for a specific estimate."
+            "Our family law team handles:\n\n"
+            "  • Separation agreements\n"
+            "  • Divorce proceedings\n"
+            "  • Child custody and access\n"
+            "  • Child and spousal support\n"
+            "  • Property division and equalization\n"
+            "  • Restraining orders\n\n"
+            "We know this is a difficult time. We'll guide you clearly and protect your interests. "
+            "Text BOOK for a free 30-minute consultation."
         ),
     },
 
-    # ── EMERGENCY ────────────────────────────────────────────────────────
+    # ── REAL ESTATE ───────────────────────────────────────────────────────
     {
-        'keywords': ['emergency', 'tooth pain', 'toothache', 'broken tooth', 'chipped', 'knocked out', 'urgent', 'asap', 'swollen'],
+        'keywords': ['real estate', 'house', 'condo', 'buying', 'selling', 'purchase',
+                     'closing', 'mortgage', 'refinance', 'title'],
         'answer': (
-            "🚨 Dental Emergency?\n\n"
-            "Call us immediately at (416) 483-2590. We hold same-day emergency slots and will get you seen as soon as possible.\n\n"
-            "If you're in severe pain or have facial swelling, go to the nearest emergency room or call 911."
+            "We handle residential and commercial real estate transactions:\n\n"
+            "  • Purchase and sale closings\n"
+            "  • Title transfer and review\n"
+            "  • Mortgage refinancing\n"
+            "  • Commercial leases\n"
+            "  • Condominium law\n\n"
+            "Our fixed-fee real estate services are straightforward and fully transparent. "
+            "Call (416) 362-0100 or text BOOK to get a quote."
         ),
     },
 
-    # ── CANCELLATION POLICY ──────────────────────────────────────────────
+    # ── WILLS & ESTATES ───────────────────────────────────────────────────
     {
-        'keywords': ['cancel', 'cancellation', 'reschedule', 'late cancel', 'miss', 'no show'],
+        'keywords': ['will', 'estate', 'power of attorney', 'poa', 'probate', 'executor',
+                     'beneficiary', 'inheritance', 'trust'],
+        'answer': (
+            "Our Wills & Estates team helps with:\n\n"
+            "  • Drafting and updating wills\n"
+            "  • Powers of attorney (property and personal care)\n"
+            "  • Estate administration and probate\n"
+            "  • Executor assistance\n"
+            "  • Estate litigation\n\n"
+            "Getting your affairs in order is one of the most important things you can do. "
+            "Text BOOK for a free consultation — we make the process simple."
+        ),
+    },
+
+    # ── CRIMINAL DEFENCE ─────────────────────────────────────────────────
+    {
+        'keywords': ['criminal', 'charged', 'arrest', 'dui', 'impaired', 'assault',
+                     'theft', 'fraud', 'bail', 'court', 'police'],
+        'answer': (
+            "🚨 Facing criminal charges? You need a lawyer immediately.\n\n"
+            "Summit Legal Partners handles:\n"
+            "  • Bail hearings\n"
+            "  • DUI / impaired driving\n"
+            "  • Assault and weapons charges\n"
+            "  • Theft, fraud, and white-collar crime\n"
+            "  • Drug offences\n"
+            "  • Appeals\n\n"
+            "Call (416) 362-0100 right now or text URGENT. We respond to criminal matters 24/7."
+        ),
+    },
+
+    # ── FEES / PRICING ────────────────────────────────────────────────────
+    {
+        'keywords': ['cost', 'price', 'how much', 'fee', 'pricing', 'billing', 'hourly',
+                     'contingency', 'flat fee', 'retainer', 'pay', 'expensive'],
+        'answer': (
+            "Our fee structure depends on the type of matter:\n\n"
+            "  ⚖️  Personal Injury — contingency (no fee unless we win)\n"
+            "  👨‍👩‍👧  Family Law — hourly or fixed-fee packages\n"
+            "  🏢  Real Estate — fixed fee (quoted upfront)\n"
+            "  💼  Corporate — hourly or project-based\n"
+            "  📋  Wills — fixed fee starting at $350\n"
+            "  🛡️  Criminal — quoted after initial consultation\n\n"
+            "Your free 30-minute consultation is always at no charge. "
+            "Text BOOK or call (416) 362-0100."
+        ),
+    },
+
+    # ── URGENT / EMERGENCY ────────────────────────────────────────────────
+    {
+        'keywords': ['urgent', 'emergency', 'asap', 'immediately', 'right now', 'today',
+                     'court tomorrow', 'served today', 'just arrested'],
+        'answer': (
+            "🚨 Urgent legal matter? Call us immediately:\n\n"
+            "  (416) 362-0100\n\n"
+            "We prioritize same-day callbacks for urgent situations including:\n"
+            "  • Criminal charges or arrest\n"
+            "  • Restraining orders\n"
+            "  • Time-sensitive court deadlines\n"
+            "  • Child apprehension matters\n\n"
+            "If it can't wait, call now."
+        ),
+    },
+
+    # ── VIRTUAL / REMOTE ─────────────────────────────────────────────────
+    {
+        'keywords': ['virtual', 'online', 'video', 'zoom', 'remote', 'phone call',
+                     'in person', 'come in', 'do i need to'],
+        'answer': (
+            "We offer both in-person and virtual consultations — your choice.\n\n"
+            "  📍 In-person: 100 King St W, Suite 5700, Toronto\n"
+            "  💻 Virtual: Zoom or Google Meet (we send the link)\n"
+            "  📞 Phone: Available on request\n\n"
+            "Most clients prefer virtual for the initial consultation. "
+            "Text BOOK to get started."
+        ),
+    },
+
+    # ── CANCELLATION POLICY ───────────────────────────────────────────────
+    {
+        'keywords': ['cancel', 'cancellation', 'reschedule', 'late cancel', 'miss', 'no show',
+                     'rebook', 'change my appointment'],
         'answer': (
             "We ask for 24 hours notice to cancel or reschedule without a fee.\n\n"
-            "To reschedule: text RESCHEDULE or call (416) 483-2590.\n"
+            "To reschedule: text RESCHEDULE or call (416) 362-0100.\n"
             "To cancel: text CANCEL.\n\n"
-            "Late cancellations (under 24 hours) may be subject to a $75 fee. No-shows may be charged $100."
+            "Late cancellations (under 24 hours) for paid consultations may be subject to a $150 fee. "
+            "Free initial consultations cancelled with less than 2 hours notice may result in a brief hold "
+            "before rebooking."
         ),
     },
 
-    # ── KIDS / FAMILY ────────────────────────────────────────────────────
+    # ── CONFIDENTIALITY ───────────────────────────────────────────────────
     {
-        'keywords': ['kids', 'children', 'child', 'family', 'pediatric', 'baby', 'infant', 'toddler'],
+        'keywords': ['confidential', 'private', 'privileged', 'secret', 'who will see',
+                     'data', 'information safe', 'pipeda'],
         'answer': (
-            "Yes! We're a family-friendly practice and love seeing young patients. "
-            "We welcome children from age 3 and recommend their first visit around age 3 or when their first teeth appear.\n\n"
-            "We make kids feel comfortable and at ease — no scary drills, just friendly care.\n\n"
-            "Text BOOK to schedule a family appointment."
+            "Everything you share with Summit Legal Partners is strictly confidential.\n\n"
+            "  🔒 Solicitor-client privilege applies from your first contact\n"
+            "  🔒 We are governed by the Law Society of Ontario's privacy rules\n"
+            "  🔒 All data is handled in compliance with PIPEDA\n"
+            "  🔒 We never share your information without your consent\n\n"
+            "You can speak freely — nothing leaves this conversation."
         ),
     },
 
-    # ── SEDATION / ANXIETY ───────────────────────────────────────────────
+    # ── LAW SOCIETY / CREDENTIALS ────────────────────────────────────────
     {
-        'keywords': ['scared', 'nervous', 'anxiety', 'fear', 'sedation', 'laughing gas', 'nitrous', 'phobia'],
+        'keywords': ['licensed', 'credentials', 'bar', 'law society', 'ontario', 'regulated', 'qualified'],
         'answer': (
-            "We understand dental anxiety is very common — you're not alone!\n\n"
-            "We offer:\n"
-            "  • Nitrous oxide (laughing gas) for mild anxiety\n"
-            "  • Oral sedation for moderate anxiety\n"
-            "  • A calm, judgment-free environment\n\n"
-            "Let us know when booking and we'll make sure your visit is as comfortable as possible. "
-            "Call (416) 483-2590 to discuss your options."
+            "Summit Legal Partners is a fully licensed Ontario law firm regulated by the "
+            "Law Society of Ontario (LSO).\n\n"
+            "All our lawyers are called to the Ontario Bar and in good standing with the LSO. "
+            "You can verify any lawyer's credentials at lso.ca."
         ),
     },
 
-    # ── WHITENING ────────────────────────────────────────────────────────
-    {
-        'keywords': ['whiten', 'whitening', 'bleach', 'brighter', 'stains', 'yellow'],
-        'answer': (
-            "We offer professional teeth whitening:\n\n"
-            "  In-office whitening: ~1 hour, results immediately\n"
-            "  Take-home kit: custom trays + gel, results in 1–2 weeks\n\n"
-            "Professional whitening is significantly more effective than over-the-counter products.\n\n"
-            "Text BOOK to schedule a whitening consultation."
-        ),
-    },
-
-    # ── IMPLANTS ─────────────────────────────────────────────────────────
-    {
-        'keywords': ['implant', 'implants', 'missing tooth', 'missing teeth'],
-        'answer': (
-            "Dental implants are the gold standard for replacing missing teeth — they look, feel, and function like natural teeth.\n\n"
-            "Our implant process:\n"
-            "  1. Consultation & planning\n"
-            "  2. Implant placement (surgical)\n"
-            "  3. Healing period (3–6 months)\n"
-            "  4. Crown placement\n\n"
-            "Cost: typically $3,000–$5,000 per implant. Many insurance plans cover partial costs.\n\n"
-            "Text BOOK for a free consultation, or call (416) 483-2590."
-        ),
-    },
-
-    # ── APPOINTMENT CONFIRMATION ─────────────────────────────────────────
+    # ── APPOINTMENT CONFIRMATION (handled by booking flow — do not intercept) ──
     {
         'keywords': ['confirm', 'confirmation', 'confirmed'],
-        'answer': None,  # Handled by booking flow — don't intercept here
+        'answer': None,
     },
 ]
 
@@ -213,7 +267,7 @@ def get_faq_answer(message: str) -> str | None:
     """
     Check if a message matches any FAQ keyword.
     Returns the answer string if matched, None if no match.
-    Call this before the state machine in sms_inbound to handle FAQ questions.
+    Called before the state machine in sms_inbound to handle FAQ questions.
     """
     msg_upper = message.upper()
     for entry in FAQ_ENTRIES:

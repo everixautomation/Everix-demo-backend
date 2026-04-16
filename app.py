@@ -1,37 +1,39 @@
 """
-Everix Growth System — Backend
-================================
+Everix Growth System — Backend (Summit Legal Partners)
+=======================================================
 Three systems, one backend:
 
   1. SPEED-TO-LEAD
-     Lead submits form → instant SMS confirmation → Retell outbound call fires
-     If no answer → follow-up SMS → booking agent takes over via text
+     Lead submits form → instant SMS confirmation → Retell outbound qualifier
+     call fires. If no answer → follow-up SMS → booking agent takes over via text.
 
   2. AI RECEPTIONIST (inbound calls)
-     Configured in Retell.ai dashboard — handles all inbound calls
-     Books, reschedules, cancels, answers FAQ — no human needed
+     Configured in Retell.ai dashboard — handles all inbound calls.
+     Books consultations, reschedules, cancels, answers FAQ — no human needed.
 
   3. SMS / WHATSAPP BOOKING AGENT
-     Handles full appointment CRUD: book, reschedule, cancel, lookup
-     Answers FAQ from Daisy's Dental knowledge base
-     Same webhook handles both SMS and WhatsApp
+     Handles full consultation CRUD: book, reschedule, cancel, lookup.
+     Answers FAQ from Summit Legal Partners knowledge base.
+     Same webhook handles both SMS and WhatsApp.
 
   REMINDERS
-     24-hour and 3-day appointment reminders sent automatically
-     Call /api/internal/send-reminders daily via Render cron job
+     24-hour and 3-day consultation reminders sent automatically.
+     Call /api/internal/send-reminders daily via Render cron job.
 
 Required environment variables (set in Render dashboard):
-  TWILIO_ACCOUNT_SID        twilio.com/console → Account Info
-  TWILIO_AUTH_TOKEN         twilio.com/console → Account Info
-  TWILIO_PHONE_NUMBER       your Twilio number e.g. +16471234567
-  RETELL_API_KEY            app.retellai.com → API Keys
-  RETELL_AGENT_ID           your Retell agent ID
-  BUSINESS_NAME             e.g. "Daisy's Dental"
-  BUSINESS_PHONE            real business phone shown in messages
-  GOOGLE_SHEETS_ID          spreadsheet ID (optional)
-  GOOGLE_CREDENTIALS_JSON   service account JSON string (optional)
-  ALLOWED_ORIGIN            https://everixautomation.com
-  INTERNAL_SECRET           any secret string for cron job auth
+  TWILIO_ACCOUNT_SID          twilio.com/console → Account Info
+  TWILIO_AUTH_TOKEN           twilio.com/console → Account Info
+  TWILIO_PHONE_NUMBER         your Twilio number e.g. +16471234567
+  RETELL_API_KEY              app.retellai.com → API Keys
+  RETELL_AGENT_ID             agent_ef0095051936a7d983f6bdc7de  (inbound receptionist)
+  RETELL_QUALIFIER_AGENT_ID   agent_2bd18cbbc51d2207a55406d615  (outbound qualifier)
+  RETELL_FROM_NUMBER          your Retell phone number e.g. +16476921660
+  BUSINESS_NAME               Summit Legal Partners
+  BUSINESS_PHONE              (416) 362-0100
+  GOOGLE_SHEETS_ID            spreadsheet ID (optional)
+  GOOGLE_CREDENTIALS_JSON     service account JSON string (optional)
+  ALLOWED_ORIGIN              https://everixautomation.com
+  INTERNAL_SECRET             any secret string for cron job auth
 """
 
 import os
@@ -395,16 +397,37 @@ def sms_inbound():
     if step == 'booking_name':
         n = body_raw.strip().title()
         conv_state[phone].update({'name': n, 'step': 'booking_service'})
-        resp.message(f"Nice to meet you, {n}! What are you looking to come in for? "
-                     f"(e.g. cleaning, check-up, new patient exam, emergency)")
+        resp.message(
+            f"Nice to meet you, {n}! What type of legal matter can we help you with?\n\n"
+            f"  1. Personal Injury\n"
+            f"  2. Family Law\n"
+            f"  3. Real Estate\n"
+            f"  4. Corporate / Commercial\n"
+            f"  5. Wills & Estates\n"
+            f"  6. Criminal Defence\n"
+            f"  7. Other / Not sure\n\n"
+            f"Reply with a number or describe your situation."
+        )
         return xml(resp)
 
     if step == 'booking_service':
-        conv_state[phone].update({'service': body_raw.strip(), 'step': 'booking_slot'})
+        # Map numeric shortcut to practice area label
+        area_map = {
+            '1': 'Personal Injury Consultation',
+            '2': 'Family Law Consultation',
+            '3': 'Real Estate Consultation',
+            '4': 'Corporate / Commercial Consultation',
+            '5': 'Wills & Estates Consultation',
+            '6': 'Criminal Defence Consultation',
+            '7': 'General Legal Consultation',
+        }
+        svc = area_map.get(body.strip(), body_raw.strip().title() + ' Consultation')
+        conv_state[phone].update({'service': svc, 'step': 'booking_slot'})
         slots = available_slots(4)
         conv_state[phone]['slots'] = slots
-        resp.message(f"Here are our next available times:\n{fmt_slots(slots)}\n\n"
-                     f"Reply 1–{len(slots)} to pick your slot.")
+        resp.message(f"Got it — {svc}.\n\n"
+                     f"Next available 30-min consultation slots:\n{fmt_slots(slots)}\n\n"
+                     f"Reply 1–{len(slots)} to pick your time.")
         return xml(resp)
 
     if step in ('booking_slot', 'slot_selection'):
@@ -523,11 +546,12 @@ def sms_inbound():
         resp.message(
             f"Hi! You've reached {BUSINESS_NAME}.\n\n"
             f"Reply:\n"
-            f"  BOOK — schedule an appointment\n"
-            f"  HOURS — our hours\n"
-            f"  SERVICES — what we offer\n"
-            f"  CALL ME — request a callback\n"
-            f"Or call us at {BUSINESS_PHONE}"
+            f"  BOOK — schedule a free consultation\n"
+            f"  HOURS — our office hours\n"
+            f"  SERVICES — areas of law we handle\n"
+            f"  URGENT — for time-sensitive matters\n"
+            f"  CALL ME — request a callback\n\n"
+            f"Or call us directly at {BUSINESS_PHONE}"
         )
     return xml(resp)
 
@@ -551,11 +575,23 @@ def _pick_slot(body, slots):
 def _do_book(phone, name, appt, wa, resp):
     if not name:
         conv_state[phone] = {'step': 'booking_name'}
-        resp.message(f"Hi! Welcome to {BUSINESS_NAME}. I can book you in right now.\n\nWhat's your name?")
+        resp.message(
+            f"Hi! Welcome to {BUSINESS_NAME}. I can book your free 30-minute consultation right now.\n\n"
+            f"What's your name?"
+        )
     else:
         conv_state.setdefault(phone, {}).update({'step': 'booking_service', 'name': name})
-        resp.message(f"Hi {name}! What are you looking to come in for? "
-                     f"(e.g. cleaning, check-up, new patient exam, emergency)")
+        resp.message(
+            f"Hi {name}! What type of legal matter can we help you with?\n\n"
+            f"  1. Personal Injury\n"
+            f"  2. Family Law\n"
+            f"  3. Real Estate\n"
+            f"  4. Corporate / Commercial\n"
+            f"  5. Wills & Estates\n"
+            f"  6. Criminal Defence\n"
+            f"  7. Other / Not sure\n\n"
+            f"Reply with a number or describe your situation."
+        )
     return xml(resp)
 
 def _do_cancel_start(phone, name, appt, wa, resp):
